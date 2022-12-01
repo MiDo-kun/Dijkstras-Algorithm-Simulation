@@ -1,90 +1,92 @@
-let graph = {
-  vertices: [],
-  adjacencyMatrix: [],
-}
+// Todo's:
+// Create a template for the nodes
+// Create a Adjacency Matrix with it
+// Create user options, 
+    // - Allow user to input the source node,
+    // - Allow user to input the end node,
+// Draw the graph in the canvas and perform specific animation
+// Mobile responsiveness 
+// Allow the page to be available in the internet
 
+// Width - 1000, Height - 600
+const vertices = [
+  [ "N0", "500", "300" ],
+  [ "N1", "400", "200" ],
+  [ "N2", "100", "150" ],
+  [ "N3", "230", "300" ],
+  [ "N4", "50", "400" ],
+  [ "N5", "400", "400" ],
+  [ "N6", "600", "100" ],
+  [ "N7", "300", "70" ],
+  [ "N8", "170", "520" ],
+  [ "N9", "350", "550" ],
+  [ "N10", "540", "530" ],
+  [ "N11", "900", "70" ],
+  [ "N12", "800", "170" ],
+  [ "N13", "670", "270" ],
+  [ "N14", "670", "430" ],
+  [ "N15", "920", "500" ],
+  [ "N16", "770", "530" ],
+  [ "N17", "880", "330" ],
+]
 function setup() {
   createCanvas(1000, 600);
   background("#1e1e1e");
 }
 
 function draw() {
-  const { vertices, adjacencyMatrix } = generateGraph(5);
-  graph.vertices = vertices;
-  graph.adjacencyMatrix = adjacencyMatrix;
-  console.table(adjacencyMatrix);
+  for (let rows = 0; rows < vertices.length; rows++) {
+    const n = vertices[rows][0];
+    const x = vertices[rows][1];
+    const y = vertices[rows][2]; 
+    drawNode(n, x, y);
+  }
+
+  const n1 = 0;
+  const n2 = 5
+  const x1 = vertices[n1][1];
+  const y1 = vertices[n1][2];
+  const x2 = vertices[n2][1];
+  const y2 = vertices[n2][2];
+
+  for (let vertex = 0; vertex < vertices.length; vertex++) {
+    if (adjacencyMatrix[vertex][1] == 0 && adjacencyMatrix[vertex][2] == 0)
+      return;
+    drawLine(x1, y1, adjacencyMatrix[vertex][1], adjacencyMatrix[vertex][2])
+  }
+
+
+let adjacencyMatrix = "[\n"
+adjacencyMatrix = vertices.map((cols, index) => {
+    let table = [];
+    for (let row = 0; row < vertices.length; row++) {
+      let x1 = cols[1];
+      let y1 = cols[2];
+      let x2 = vertices[row][1];
+      let y2 = vertices[row][2]; 
+      // drawLine(x1, y1, x2, y2) 
+      table.push(dist(cols[1], cols[2], vertices[row][1], vertices[row][2]));
+    }
+    return table;
+  });
+  adjacencyMatrix+= "\n]";
+console.table(adjacencyMatrix);
+  
   noLoop();
 }
 
-// Randomize the graph 
-document.querySelector("#random").addEventListener('click', () => {
-  resetGraph();
-  const numberOfNodes = document.querySelector('input[name=\'total\']').value;
-  const { vertices, adjacencyMatrix } = generateGraph(numberOfNodes);
-  console.table(adjacencyMatrix);
-  
-  graph.vertices = vertices;
-  graph.adjacencyMatrix = adjacencyMatrix;
-});
-
-// A functionality where the user select the specific algoirithm to execute
-const btns = document.querySelectorAll("#btns button");
-btns.forEach(btn => {
-  btn.addEventListener("click", algorithm => {     
-    const typeOfAlgorithm = algorithm.target.textContent;
-    switch (typeOfAlgorithm) {
-      case "Dijsktra's Algorithm":
-        dijsktra(graph.vertices, graph.adjacencyMatrix);
-        break;
-      case "Prim's Algorithm":
-        prim(graph.vertices, graph.adjacencyMatrix);
-        break;
-      case "Krushkal's Algorithm":
-        alert("Krushkal's Algorithm")
-        break;
-      default:
-        alert("Invalid Input. Please try again");
-        break;
-    } 
-  })  
-})
-
-// Generate Nodes and Adjacency Matrix
-function generateGraph(numberOfNodes) { 
-  const vertices = new Array(Number(numberOfNodes));
-  for (let vertex = 0; vertex < vertices.length; vertex++) {
-    const name = `N${vertex}`;
-    const xAxis = random(1000);
-    const yAxis = random(600);
-    vertices[vertex] = [name, xAxis, yAxis]
-  }
- 
-  // Render the vertices in the canvas.
-  vertices.forEach(vertex => {
-    circle(vertex[1], vertex[2], 60)
-    textAlign(CENTER, CENTER);
-    stroke(0)
-    textSize(18)
-    text(vertex[0], vertex[1], vertex[2])
-  })  
-  
-  // Calculate weights for every adjacent nodes 
-  // then turn it into adjacency matrix.
-  const adjacencyMatrix = vertices.map((cols, index) => {
-    let table = [];
-    for (let row = 0; row < vertices.length; row++)
-      table.push(dist(cols[1], cols[2], vertices[row][1], vertices[row][2]));
-    return table;
-  });
-  
-  return { vertices, adjacencyMatrix };
+function drawLine(x1, y1, x2, y2) {
+  strokeWeight(2);
+  stroke('white') 
+  line(x1, y1, x2, y2)
 }
 
-function resetGraph() {
-  strokeWeight(1);
-  clear(); // Clear all objects in the canvas.
-  console.clear(); // Clear adjacency matrix in the console.
-  background("#1e1e1e"); // re-apply the background color again
+function drawNode(n, x, y) {
+  circle(x, y, 50)
+  textAlign(CENTER, CENTER)
+  textStyle(BOLD)
+  textSize(15)
+  text(n, x, y)
 }
 
 function animateLine(x1, y1, x2, y2, text1, text2, interval, color) {
@@ -114,46 +116,6 @@ function animateLine(x1, y1, x2, y2, text1, text2, interval, color) {
   }, 1000 * interval)
 }
 
-function prim(vertices, graph) {
-  let V = vertices.length
-  let parent = [];
-  let key = [];
-  let mstSet = [];
-
-  for (let i = 0; i < V; i++)
-    key[i] = Number.MAX_VALUE, mstSet[i] = false;
-
-  let interval = 0;
-  key[0] = 0;
-  parent[0] = -1; // First node is always root of MST
-
-  for (let count = 0; count < V - 1; count++) {
-    let min = Number.MAX_VALUE, min_index;
-    for (let v = 0; v < V; v++) {
-
-          animateLine(vertices[count][1], vertices[count][2], vertices[v][1], vertices[v][2], count, v, ++interval, 'white');  
-      if (mstSet[v] == false && key[v] < min) {
-        min = key[v];
-        min_index = v;
-      }
-    }
-
-    let u = min_index;
-    mstSet[u] = true;
-    for (let v = 0; v < V; v++) {
-      if (graph[u][v] && mstSet[v] == false && graph[u][v] < key[v]) {
-        parent[v] = u, key[v] = graph[u][v];
-      }    
-    }
-  } 
-  console.table(parent);
-  for (let i = 1; i < V; i++) {
-    let v = parent[i];
-    let count = i;
-    animateLine(vertices[v][1], vertices[v][2], vertices[count][1], vertices[count][2], count, v, ++interval, 'red');
-  }
-}
-
 function dijsktra(vertices, graph) { 
   const V = vertices.length;
   let dist = new Array(V);
@@ -165,7 +127,7 @@ function dijsktra(vertices, graph) {
   }
 
   dist[0] = 0;
-  let interval = 0;
+  let interval = 0; // Doesn't do with the algorithm, for animating the line only.
   for(let count = 0; count < V - 1; count++) {
     let min = Number.MAX_VALUE;
     let min_index = -1;
