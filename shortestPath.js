@@ -74,7 +74,7 @@ function draw() {
       let y1 = vertices[rows][2]
       let x2 = vertices[cols][1]
       let y2 = vertices[cols][2]
-      drawLine(x1, y1, x2, y2, 'white', ++interval)
+      // drawLine(x1, y1, x2, y2, 'white', ++interval)
       // line(x1, y1, x2, y2)
     }
   }
