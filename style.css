@@ -8,9 +8,7 @@
 }
 
 body {
-  margin-top: 3rem;
-  width: 100vw;
-  height: 100vh;
+  margin: 2rem 0;
 }
 
 h1 {
@@ -34,8 +32,8 @@ button {
 
 input {
   margin: 0 .5rem;
-  padding-left: .3rem;
-  width: 30px;
+  padding: .3rem;
+  width: 45px;
   height: 30px;
   border-color: #f1f1f1;
   outline: none;
@@ -47,8 +45,6 @@ main {
   align-content: center;
 }
 
-canvas {
-  border: 1px solid #333;
-  min-width: 1000px !important;
-  min-height: 600px;
+#adjacencyMatrix {
+  margin-bottom: 1.5rem;
 }
