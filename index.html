@@ -8,11 +8,27 @@
   <link href="./style.css" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.5.0/p5.min.js"></script>
   <script src="./shortestPath.js" defer></script>
+  <script src="./canvasContainer.js" defer></script>
 </head>
 
 <body>
   <p>Shortest Path Algorithms by using p5.js</p>
   <div id="options">
+<<<<<<< HEAD
+    <button id="adjacencyMatrix">Graph Adjacency Matrix</button>    
+  </div>
+  <div id="options">
+    <label for="start_node"> Source Node: </label>
+    <input type="number" name="total" value="4" id="start" min="0" max="17">
+    <label for="end_node"> End Node: </label>
+    <input type="number" name="total" value="11" id="end" min="0" max="17">
+  </div>
+  <div id="options">
+    <button type="button" id="findShortestPath">Find Shortest Path</button>
+  </div>
+  <div id="options">
+    <button type="button" id="generateShortPathTree">Show Shortest Path Tree</button>
+=======
     <label for="starting_node">Starting Node: </label>
     <input type="number" name="total" value="5">
     <button type="button" id="random">Randomize</button>
@@ -21,6 +37,7 @@
     <button type="button">Dijsktra's Algorithm</button>
     <button type="button"></button>
     <button type="button"></button>
+>>>>>>> main
   </div>
 </body>
 
