@@ -50,3 +50,9 @@ main {
   margin-top: 1.5rem;
   margin-bottom: 1rem;
 }
+
+@media only screen and (max-width: 425px) {
+  h1 {
+    font-size: 1.2rem;
+  }
+}

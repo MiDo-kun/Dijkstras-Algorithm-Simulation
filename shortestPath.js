@@ -18,6 +18,7 @@ function draw() {
   console.table(adjacencyMatrix)
 }
 
+let interval = 0;
 const vertices = [
   ["N0", 500, 300], ["N1", 400, 200], ["N2", 100, 150],
   ["N3", 230, 300], ["N4", 50, 400], ["N5", 400, 400],
@@ -51,14 +52,15 @@ let adjacencyMatrix = [
 let isGraphAnimated = false;
 // Animate adjacency matrix
 document.querySelector('#adjacencyMatrix').addEventListener('click', () => {
-    animateGraph(false);
+    animateGraph(true);
 })
 
 
 // Find shortestPath using dijsktra's
 document.querySelector("#findShortestPath").addEventListener('click', () => {
+  console.log(isGraphAnimated);
   if (!isGraphAnimated) {
-    window.alert("Please graph the weighted adjacency matrix first before finding for the shortest path.")
+    window.alert("Please wait for the animation to finish or graph the weighted adjacency matrix first");
     return;
   }
   const start = document.querySelector("#start").value;
@@ -68,10 +70,13 @@ document.querySelector("#findShortestPath").addEventListener('click', () => {
 
 // Show the shortest path from a specific node to the rest of all nodes
 document.querySelector("#generateShortPathTree").addEventListener('click', () => {
+  console.log(isGraphAnimated)
   if (!isGraphAnimated) {
-    window.alert("Please graph the weighted adjacency matrix first before finding for the shortest path.")
+    window.alert("Please wait for the animation to finish or graph the weighted adjacency matrix first");
     return;
   }
+  const start = document.querySelector("#start").value;
+  dijsktra(vertices, adjacencyMatrix, parseInt(start), -1);
 })
 
 // Dijktra's Algorithm function
@@ -83,7 +88,7 @@ function dijsktra(vertices, graph, start, end) {
   let backTrackedNodes = new Array(adjacencyMatrix.length); // Used to backtrack the node/s from the given start to end.
 
   animateGraph(false); // Overwrite the red edges to white with no animation.
-
+  
   for (let i = 0; i < totalNodes; i++) {
     shortestDistance[i] = Number.MAX_VALUE;
     isVisited[i] = false;
@@ -109,25 +114,38 @@ function dijsktra(vertices, graph, start, end) {
         shortestDistance[min_index] + graph[min_index][v] < shortestDistance[v]) {
 
         shortestDistance[v] = shortestDistance[min_index] + graph[min_index][v]; // Calculate the shortest shortestDistanceance
-        backTrackedNodes[v] = min_index; // Backtracking the nodes 
+        backTrackedNodes[v] = min_index; // Backtracking nodes 
       }
     }
   }
 
-  let trackNode = end; // Start tracing from end to start
-  let trackedNodes = [];
-  while (true) {
-    trackedNodes.push(trackNode);
-    trackNode = backTrackedNodes[trackNode];
+  // Start tracking paths and animate it
+  isGraphAnimated = false;
+  interval = 0;
 
-    if (trackNode == -1)
+  for (let vertex = 0; vertex < totalNodes; vertex++) {
+    let trackNode = (end != -1) ? end : vertex;
+    let trackedNodes = [];
+    
+    if (vertex == start)
+      continue;
+    
+    while (true) {
+      trackedNodes.push(trackNode);
+      trackNode = backTrackedNodes[trackNode];
+  
+      if (trackNode == -1)
+        break;
+    }
+  
+    animateDijsktra(trackedNodes, 'red');
+    
+    if (end != -1)
       break;
   }
-  animateDijsktra(trackedNodes, 'red');
 }
 
 function animateDijsktra(backTrackArr, color) {
-  let interval = 0;  
   for (let vertex = backTrackArr.length - 1; vertex >= 1; vertex--) { // Reverse the nodes and animate from start to end
     let trace = vertex;
     let vertex1 = backTrackArr[trace];
@@ -142,8 +160,10 @@ function animateDijsktra(backTrackArr, color) {
     const y2 = vertices[vertex2][2];
     // Animate the line
     drawLine(x1, y1, x2, y2, color, interval+=2, n1, n2, 0.3);
+
+    if (vertex == 1) 
+      setTimeout(() => isGraphAnimated = true, ++interval * 1000);
   }
-  backTrackArr.splice(0, backTrackArr.length - 1);
 }
 
 function animateGraph(performAnimation) {
@@ -162,7 +182,7 @@ function animateGraph(performAnimation) {
     for (let cols = 0; cols < adjacencyMatrix.length; cols++) {
       if (adjacencyMatrix[rows][cols] != 0 && isVisited[rows][cols] == false) {
         if (performAnimation == true)
-          ++interval, speed = 0.3;
+          interval+=2, speed = 0.2;
 
         // Node 1 details
         let n1 = vertices[rows][0];
@@ -201,6 +221,7 @@ function drawNode(n, x, y) {
 function drawLine(x1, y1, x2, y2, color, interval, n1, n2, speed) {
   setTimeout(() => {
     let angle = 0;
+    isGraphAnimated = false;
     const animate = setInterval(() => {
       let tempX = map(angle, 0, 100, x1, x2, 1);
       let tempY = map(angle, 0, 100, y1, y2, 1);
@@ -215,6 +236,6 @@ function drawLine(x1, y1, x2, y2, color, interval, n1, n2, speed) {
 
       drawNode(n1, x1, y1)
       drawNode(n2, x2, y2)
-    }, 0);
+    }, speed);
   }, 1000 * interval)
 }
