@@ -6,6 +6,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="./style.css" rel="stylesheet">
+  <link rel="icon" href="logo.ico" type="image/text">
   <script src="https://cdn.jsdelivr.net/npm/p5@1.5.0/lib/p5.js"></script>
   <script src="./shortestPath.js" defer></script>
   <script src="./canvasContainer.js" defer></script>
@@ -14,13 +15,15 @@
 <body>
   <h1>Shortest Path Algorithm by using p5.js</h1>
   <div id="options">
-    <button id="adjacencyMatrix">Graph Adjacency Matrix</button>    
+    <button id="adjacencyMatrix">Graph Adjacency Matrix</button>
   </div>
   <div id="options">
     <label for="start_node"> Source Node: </label>
     <input type="number" name="total" value="4" id="start" min="0" max="17">
     <label for="end_node"> End Node: </label>
     <input type="number" name="total" value="11" id="end" min="0" max="17">
+    <label>Speed</label>
+    <input type="number" name="total" value="5" id="speed" min="1" max="10">
   </div>
   <div id="options">
     <button type="button" id="findShortestPath">Find Shortest Path</button>

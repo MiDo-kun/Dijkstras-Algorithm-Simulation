@@ -1,0 +1,5 @@
+{
+  "projects": {
+    "default": "dijkstras-algorithm-simulation"
+  }
+}

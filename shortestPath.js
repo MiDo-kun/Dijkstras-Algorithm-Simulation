@@ -146,6 +146,7 @@ function dijsktra(vertices, graph, start, end) {
 }
 
 function animateDijsktra(backTrackArr, color) {
+  const animationSpeed = .30;
   for (let vertex = backTrackArr.length - 1; vertex >= 1; vertex--) { // Reverse the nodes and animate from start to end
     let trace = vertex;
     let vertex1 = backTrackArr[trace];
@@ -159,7 +160,7 @@ function animateDijsktra(backTrackArr, color) {
     const x2 = vertices[vertex2][1];
     const y2 = vertices[vertex2][2];
     // Animate the line
-    drawLine(x1, y1, x2, y2, color, interval+=2, n1, n2, 0.3);
+    drawLine(x1, y1, x2, y2, color, interval+=2, n1, n2, animationSpeed);
 
     if (vertex == 1) 
       setTimeout(() => isGraphAnimated = true, ++interval * 1000);
@@ -168,7 +169,7 @@ function animateDijsktra(backTrackArr, color) {
 
 function animateGraph(performAnimation) {
   let interval = 0;
-  let speed = 100;
+  const animationSpeed = (document.querySelector("#speed").value) * .10;
 
   // Keep track of the visited nodes
   let isVisited = new Array(adjacencyMatrix.length);
@@ -195,7 +196,7 @@ function animateGraph(performAnimation) {
         let y2 = vertices[cols][2];
         
         // Function that draws the line
-        drawLine(x1, y1, x2, y2, 'white', interval, n1, n2, speed)
+        drawLine(x1, y1, x2, y2, 'white', interval, n1, n2, animationSpeed)
 
         // If the node is already been visited, then don't animate it.
         adjacencyMatrix[cols][rows] = 1;
