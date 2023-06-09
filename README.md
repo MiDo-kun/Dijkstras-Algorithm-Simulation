@@ -1,6 +1,6 @@
 # Dijkstra's Algorithm Simulation
 
-Dijkstra's Algorithm is a web application that uses p5.js, a JavaScript framework library, to simulate how Dijkstra's algorithm works. The project allows visitors to understand how the algorithm works in real-time by animating the entire process of the algorithm. This project aims to help fellow developers gain a better understanding of how the algorithm works in real-world scenarios.
+Dijkstra's Algorithm Simulation is a web application that uses p5.js, a JavaScript framework library, to simulate how Dijkstra's algorithm works. The project allows visitors to understand how the algorithm works in real-time by animating the entire process of the algorithm. This project aims to help fellow developers gain a better understanding of how the algorithm works in real-world scenarios.
 
 The application is designed to be user-friendly and interactive. Users can define the speed of the algorithm and animate the algorithm according to their preferences, such as finding the shortest path or the shortest path tree.
 
